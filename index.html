@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRODUK REV HOST</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700;900&family=Orbitron:wght@700&display=swap');
+        
+        :root {
+            --color1: #ff00ff;
+            --color2: #00ffff;
+            --color3: #ffff00;
+            --color4: #ff00aa;
+            --color5: #00ffaa;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0a0a20;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            position: relative;
+        }
+        
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
+            margin: 0;
+            background: linear-gradient(90deg, var(--color1), var(--color2), var(--color3), var(--color4), var(--color5));
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradient 8s ease infinite;
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+        }
+        
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .product-card {
+            background: rgba(20, 20, 50, 0.7);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid transparent;
+            animation: borderGlow 6s infinite linear;
+        }
+        
+        @keyframes borderGlow {
+            0% { border-color: var(--color1); box-shadow: 0 0 15px var(--color1); }
+            20% { border-color: var(--color2); box-shadow: 0 0 15px var(--color2); }
+            40% { border-color: var(--color3); box-shadow: 0 0 15px var(--color3); }
+            60% { border-color: var(--color4); box-shadow: 0 0 15px var(--color4); }
+            80% { border-color: var(--color5); box-shadow: 0 0 15px var(--color5); }
+            100% { border-color: var(--color1); box-shadow: 0 0 15px var(--color1); }
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+        }
+        
+        .product-title {
+            font-size: 1.8rem;
+            margin: 0 0 10px;
+            color: white;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .product-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--color1), var(--color2));
+            animation: titleUnderline 4s infinite;
+        }
+        
+        @keyframes titleUnderline {
+            0% { background: linear-gradient(90deg, var(--color1), var(--color2)); }
+            25% { background: linear-gradient(90deg, var(--color2), var(--color3)); }
+            50% { background: linear-gradient(90deg, var(--color3), var(--color4)); }
+            75% { background: linear-gradient(90deg, var(--color4), var(--color5)); }
+            100% { background: linear-gradient(90deg, var(--color5), var(--color1)); }
+        }
+        
+        .product-price {
+            font-size: 1.5rem;
+            margin: 15px 0;
+            color: #00ffaa;
+            text-shadow: 0 0 10px rgba(0, 255, 170, 0.5);
+        }
+        
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+            padding: 8px 0;
+            border-bottom: 1px dashed rgba(255,255,255,0.1);
+        }
+        
+        .price-value {
+            color: var(--color3);
+            font-weight: bold;
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 2px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+        
+        .product-image:hover {
+            transform: scale(1.03);
+            border-color: var(--color1);
+        }
+        
+        .buy-button {
+            display: inline-block;
+            padding: 8px 15px;
+            background: linear-gradient(45deg, var(--color1), var(--color3));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            box-shadow: 0 3px 10px rgba(255,0,255,0.3);
+        }
+        
+        .buy-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255,0,255,0.5);
+        }
+        
+        .buy-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--color4), var(--color5));
+            transition: all 0.4s;
+            z-index: -1;
+        }
+        
+        .buy-button:hover::before {
+            left: 0;
+        }
+        
+        .light {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            filter: blur(5px);
+            animation: lightPulse 3s infinite alternate;
+        }
+        
+        @keyframes lightPulse {
+            0% { opacity: 0.3; transform: scale(0.8); }
+            100% { opacity: 0.8; transform: scale(1.2); }
+        }
+        
+        .light-1 { background: var(--color1); top: 10%; left: 5%; }
+        .light-2 { background: var(--color2); top: 20%; right: 10%; animation-delay: 0.5s; }
+        .light-3 { background: var(--color3); bottom: 15%; left: 15%; animation-delay: 1s; }
+        .light-4 { background: var(--color4); bottom: 25%; right: 5%; animation-delay: 1.5s; }
+        .light-5 { background: var(--color5); top: 50%; left: 50%; animation-delay: 2s; }
+        
+        .animated-line {
+            height: 3px;
+            width: 100%;
+            margin: 20px 0;
+            background: linear-gradient(90deg, transparent, var(--color1), transparent);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .animated-line::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, var(--color2), var(--color3), transparent);
+            animation: lineFlow 3s infinite;
+        }
+        
+        @keyframes lineFlow {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="light light-1"></div>
+            <div class="light light-2"></div>
+            <div class="light light-3"></div>
+            <div class="light light-4"></div>
+            <div class="light light-5"></div>
+            <h1>PRODUK REV HOST</h1>
+            <div class="animated-line"></div>
+        </header>
+        
+        <div class="products-grid">
+            <!-- Original Products -->
+            <div class="product-card">
+                <h2 class="product-title">RESELLER PANEL</h2>
+                <div class="product-price">HARGA: 5K</div>
+                <img src="https://files.catbox.moe/h2bvce.jpg" alt="Reseller Panel" class="product-image">
+                <button class="buy-button">BELI SEKARANG</button>
+            </div>
+            
+            <div class="product-card">
+                <h2 class="product-title">ADMIN PANEL</h2>
+                <div class="product-price">HARGA: 10K</div>
+                <img src="https://files.catbox.moe/h2bvce.jpg" alt="Admin Panel" class="product-image">
+                <button class="buy-button">BELI SEKARANG</button>
+            </div>
+            
+            <div class="product-card">
+                <h2 class="product-title">OWNER PANEL</h2>
+                <div class="product-price">HARGA: 17K</div>
+                <img src="https://files.catbox.moe/h2bvce.jpg" alt="Owner Panel" class="product-image">
+                <button class="buy-button">BELI SEKARANG</button>
+            </div>
+            
+            <div class="product-card">
+                <h2 class="product-title">PT PANEL</h2>
+                <div class="product-price">HARGA: 25K</div>
+                <img src="https://files.catbox.moe/h2bvce.jpg" alt="PT Panel" class="product-image">
+                <button class="buy-button">BELI SEKARANG</button>
+            </div>
+            
+            <div class="product-card">
+                <h2 class="product-title">MURPUSH</h2>
+                <div class="product-price">HARGA: 3K</div>
+                <img src="https://img1.pixhost.to/images/6825/616202594_skyzopedia.jpg" alt="Murpush" class="product-image">
+                <button class="buy-button">BELI SEKARANG</button>
+            </div>
+            
+            <div class="product-card">
+                <h2 class="product-title">MURBUG</h2>
+                <div class="product-price">HARGA: 25K</div>
+                <img src="https://img1.pixhost.to/images/6825/616207643_skyzopedia.jpg" alt="Murbug" class="product-image">
+                <button class="buy-button">BELI SEKARANG</button>
+            </div>
+            
+            <!-- New Product: BOT PUSH KONTAK -->
+            <div class="product-card">
+                <h2 class="product-title">BOT PUSH KONTAK</h2>
+                <div class="product-price">PAKET HARGA:</div>
+                <div class="price-item">
+                    <span>1 HARI</span>
+                    <span class="price-value">3K</span>
+                    <button class="buy-button">BELI</button>
+                </div>
+                <div class="price-item">
+                    <span>3 HARI</span>
+                    <span class="price-value">5K</span>
+                    <button class="buy-button">BELI</button>
+                </div>
+                <div class="price-item">
+                    <span>7 HARI</span>
+                    <span class="price-value">10K</span>
+                    <button class="buy-button">BELI</button>
+                </div>
+                <div class="price-item">
+                    <span>14 HARI</span>
+                    <span class="price-value">15K</span>
+                    <button class="buy-button">BELI</button>
+                </div>
+                <div class="price-item">
+                    <span>17 HARI</span>
+                    <span class="price-value">20K</span>
+                    <button class="buy-button">BELI</button>
+                </div>
+                <div class="price-item">
+                    <span>20 HARI</span>
+                    <span class="price-value">25K</span>
+                    <button class="buy-button">BELI</button>
+                </div>
+                <div class="price-item">
+                    <span>24 HARI</span>
+                    <span class="price-value">30K</span>
+                    <button class="buy-button">BELI</button>
+                </div>
+                <div class="price-item">
+                    <span>1 BULAN</span>
+                    <span class="price-value">35K</span>
+                    <button class="buy-button">BELI</button>
+                </div>
+            </div>
+            
+            <!-- New Product: PANEL BOT WA -->
+            <div class="product-card">
+                <h2 class="product-title">PANEL BOT WA</h2>
+                <div class="product-price">PAKET HARGA:</div>
+                <div class="price-item">
+                    <span>1GB</span>
+                    <span class="price-value">500P</span>
+                    <button class="buy-button">BELI</button>
+                </div>
+                <div class="price-item">
+                    <span>2GB</span>
+                    <span class="price-value">1K</span>
+                    <button class="buy-button">BELI</button>
+                </div>
+                <div class="price-item">
+                    <span>3GB</span>
+                    <span class="price-value">1,5K</span>
+                    <button class="buy-button">BELI</button>
+                </div>
+                <div class="price-item">
+                    <span>4GB</span>
+                    <span class="price-value">2K</span>
+                    <button class="buy-button">BELI</button>
+                </div>
+                <div class="price-item">
+                    <span>5GB</span>
+                    <span class="price-value">2,5K</span>
+                    <button class="buy-button">BELI</button>
+                </div>
+                <div class="price-item">
+                    <span>6GB</span>
+                    <span class="price-value">3K</span>
+                    <button class="buy-button">BELI</button>
+                </div>
+                <div class="price-item">
+                    <span>7GB</span>
+                    <span class="price-value">3,5K</span>
+                    <button class="buy-button">BELI</button>
+                </div>
+                <div class="price-item">
+                    <span>8GB</span>
+                    <span class="price-value">4K</span>
+                    <button class="buy-button">BELI</button>
+                </div>
+                <div class="price-item">
+                    <span>9GB</span>
+                    <span class="price-value">4,5K</span>
+                    <button class="buy-button">BELI</button>
+                </div>
+                <div class="price-item">
+                    <span>10GB</span>
+                    <span class="price-value">5K</span>
+                    <button class="buy-button">BELI</button>
+                </div>
+                <div class="price-item" style="border-bottom: none;">
+                    <span>UNLI</span>
+                    <span class="price-value">7K</span>
+                    <button class="buy-button">BELI</button>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2025 PRODUK REV HOST | All Rights Reserved</p>
+        </footer>
+    </div>
+</body>
+</html>
