@@ -28,57 +28,471 @@
             background-position: center;
         }
         
-        /* Previous styles remain the same until .products-grid */
-        
-        /* New Menu Tab Styles */
-        .menu-tabs {
-            display: flex;
-            justify-content: center;
-            margin: 30px 0;
-            flex-wrap: wrap;
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(10, 10, 32, 0.85);
+            z-index: -1;
         }
         
-        .menu-tab {
-            padding: 12px 25px;
-            margin: 0 10px;
-            background: rgba(20, 20, 50, 0.7);
+        .name-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .name-form {
+            background: rgba(20, 20, 50, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.5);
+            border: 2px solid var(--color1);
+            animation: borderGlow 6s infinite linear;
+            max-width: 400px;
+            width: 90%;
+        }
+        
+        .name-form h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: white;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            background: linear-gradient(90deg, var(--color1), var(--color2), var(--color3));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .name-input {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 20px;
             border: none;
             border-radius: 50px;
+            background: rgba(255, 255, 255, 0.1);
             color: white;
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Poppins', sans-serif;
             font-size: 1rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+        
+        .name-input:focus {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 10px var(--color1);
+        }
+        
+        .submit-name {
+            padding: 10px 25px;
+            background: linear-gradient(45deg, var(--color1), var(--color3));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 3px 10px rgba(255,0,255,0.3);
+        }
+        
+        .submit-name:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255,0,255,0.5);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            position: relative;
+        }
+        
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
+            margin: 0;
+            background: linear-gradient(90deg, var(--color1), var(--color2), var(--color3), var(--color4), var(--color5));
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradient 8s ease infinite;
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+        }
+        
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .product-card {
+            background: rgba(20, 20, 50, 0.7);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid transparent;
+            animation: borderGlow 6s infinite linear;
             backdrop-filter: blur(5px);
         }
         
-        .menu-tab.active {
+        @keyframes borderGlow {
+            0% { border-color: var(--color1); box-shadow: 0 0 15px var(--color1); }
+            20% { border-color: var(--color2); box-shadow: 0 0 15px var(--color2); }
+            40% { border-color: var(--color3); box-shadow: 0 0 15px var(--color3); }
+            60% { border-color: var(--color4); box-shadow: 0 0 15px var(--color4); }
+            80% { border-color: var(--color5); box-shadow: 0 0 15px var(--color5); }
+            100% { border-color: var(--color1); box-shadow: 0 0 15px var(--color1); }
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+        }
+        
+        .product-title {
+            font-size: 1.8rem;
+            margin: 0 0 10px;
+            color: white;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .product-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--color1), var(--color2));
+            animation: titleUnderline 4s infinite;
+        }
+        
+        @keyframes titleUnderline {
+            0% { background: linear-gradient(90deg, var(--color1), var(--color2)); }
+            25% { background: linear-gradient(90deg, var(--color2), var(--color3)); }
+            50% { background: linear-gradient(90deg, var(--color3), var(--color4)); }
+            75% { background: linear-gradient(90deg, var(--color4), var(--color5)); }
+            100% { background: linear-gradient(90deg, var(--color5), var(--color1)); }
+        }
+        
+        .product-price {
+            font-size: 1.5rem;
+            margin: 15px 0;
+            color: #00ffaa;
+            text-shadow: 0 0 10px rgba(0, 255, 170, 0.5);
+        }
+        
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+            padding: 8px 0;
+            border-bottom: 1px dashed rgba(255,255,255,0.1);
+        }
+        
+        .price-value {
+            color: var(--color3);
+            font-weight: bold;
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 2px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+        
+        .product-image:hover {
+            transform: scale(1.03);
+            border-color: var(--color1);
+        }
+        
+        .buy-button {
+            display: inline-block;
+            padding: 8px 15px;
             background: linear-gradient(45deg, var(--color1), var(--color3));
-            box-shadow: 0 0 15px var(--color1);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            box-shadow: 0 3px 10px rgba(255,0,255,0.3);
         }
         
-        .menu-tab:hover {
+        .buy-button:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(255,0,255,0.3);
+            box-shadow: 0 5px 15px rgba(255,0,255,0.5);
         }
         
-        .menu-section {
+        .buy-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--color4), var(--color5));
+            transition: all 0.4s;
+            z-index: -1;
+        }
+        
+        .buy-button:hover::before {
+            left: 0;
+        }
+        
+        .light {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            filter: blur(5px);
+            animation: lightPulse 3s infinite alternate;
+        }
+        
+        @keyframes lightPulse {
+            0% { opacity: 0.3; transform: scale(0.8); }
+            100% { opacity: 0.8; transform: scale(1.2); }
+        }
+        
+        .light-1 { background: var(--color1); top: 10%; left: 5%; }
+        .light-2 { background: var(--color2); top: 20%; right: 10%; animation-delay: 0.5s; }
+        .light-3 { background: var(--color3); bottom: 15%; left: 15%; animation-delay: 1s; }
+        .light-4 { background: var(--color4); bottom: 25%; right: 5%; animation-delay: 1.5s; }
+        .light-5 { background: var(--color5); top: 50%; left: 50%; animation-delay: 2s; }
+        
+        .animated-line {
+            height: 3px;
+            width: 100%;
+            margin: 20px 0;
+            background: linear-gradient(90deg, transparent, var(--color1), transparent);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .animated-line::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, var(--color2), var(--color3), transparent);
+            animation: lineFlow 3s infinite;
+        }
+        
+        @keyframes lineFlow {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+        }
+        
+        .welcome-message {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            color: var(--color2);
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        /* WhatsApp Button Styles */
+        .whatsapp-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 99;
+            background-color: #25D366;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 2s infinite;
+        }
+        
+        .whatsapp-button:hover {
+            background-color: #128C7E;
+            transform: scale(1.1);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+        
+        .whatsapp-tooltip {
+            position: fixed;
+            bottom: 30px;
+            right: 90px;
+            z-index: 99;
+            background-color: rgba(20, 20, 50, 0.9);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
             display: none;
-            animation: fadeIn 0.5s ease;
+            border: 1px solid var(--color1);
+            animation: borderGlow 6s infinite linear;
         }
         
-        .menu-section.active {
+        .whatsapp-button:hover + .whatsapp-tooltip {
             display: block;
         }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+
+        /* Payment Modal */
+        .payment-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1001;
+            justify-content: center;
+            align-items: center;
         }
-        
-        /* Rest of your existing styles remain the same */
+
+        .payment-content {
+            background: rgba(20, 20, 50, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            border: 2px solid var(--color1);
+            animation: borderGlow 6s infinite linear;
+        }
+
+        .payment-content h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--color2);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .payment-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .payment-option {
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+
+        .payment-option:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: var(--color1);
+        }
+
+        .payment-option.selected {
+            background: rgba(0, 255, 170, 0.2);
+            border-color: var(--color5);
+        }
+
+        .confirm-payment {
+            padding: 10px 20px;
+            background: linear-gradient(45deg, var(--color1), var(--color3));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .confirm-payment:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255,0,255,0.5);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .whatsapp-button {
+                width: 50px;
+                height: 50px;
+                font-size: 25px;
+            }
+            
+            .whatsapp-tooltip {
+                bottom: 25px;
+                right: 80px;
+                font-size: 12px;
+            }
+        }
     </style>
+    <!-- Link untuk ikon Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <div class="overlay"></div>
@@ -86,249 +500,300 @@
     <div class="name-modal" id="nameModal">
         <div class="name-form">
             <h2>MASUKKAN NAMA ANDA</h2>
-            <input type="text" class="name-input" id="nameInput" placeholder="Nama Anda..." required>
-            <button class="submit-name" id="submitName">MASUK</button>
+            <input type="text
+        <input type="text" class="name-input" id="nameInput" placeholder="Nama Anda..." required>
+        <button class="submit-name" id="submitName">MASUK</button>
+    </div>
+</div>
+
+<div class="container" id="mainContent" style="display: none;">
+    <header>
+        <div class="light light-1"></div>
+        <div class="light light-2"></div>
+        <div class="light light-3"></div>
+        <div class="light light-4"></div>
+        <div class="light light-5"></div>
+        <h1>PRODUK REV HOST</h1>
+        <div class="animated-line"></div>
+        <div class="welcome-message" id="welcomeMessage"></div>
+    </header>
+    
+    <div class="products-grid">
+        <!-- Original Products -->
+        <div class="product-card">
+            <h2 class="product-title">RESELLER PANEL</h2>
+            <div class="product-price">HARGA: 5K</div>
+            <img src="https://files.catbox.moe/h2bvce.jpg" alt="Reseller Panel" class="product-image">
+            <button class="buy-button" data-product="RESELLER PANEL" data-price="5K">BELI SEKARANG</button>
+        </div>
+        
+        <div class="product-card">
+            <h2 class="product-title">ADMIN PANEL</h2>
+            <div class="product-price">HARGA: 10K</div>
+            <img src="https://files.catbox.moe/h2bvce.jpg" alt="Admin Panel" class="product-image">
+            <button class="buy-button" data-product="ADMIN PANEL" data-price="10K">BELI SEKARANG</button>
+        </div>
+        
+        <div class="product-card">
+            <h2 class="product-title">OWNER PANEL</h2>
+            <div class="product-price">HARGA: 17K</div>
+            <img src="https://files.catbox.moe/h2bvce.jpg" alt="Owner Panel" class="product-image">
+            <button class="buy-button" data-product="OWNER PANEL" data-price="17K">BELI SEKARANG</button>
+        </div>
+        
+        <div class="product-card">
+            <h2 class="product-title">PT PANEL</h2>
+            <div class="product-price">HARGA: 25K</div>
+            <img src="https://files.catbox.moe/h2bvce.jpg" alt="PT Panel" class="product-image">
+            <button class="buy-button" data-product="PT PANEL" data-price="25K">BELI SEKARANG</button>
+        </div>
+        
+        <div class="product-card">
+            <h2 class="product-title">MURPUSH</h2>
+            <div class="product-price">HARGA: 3K</div>
+            <img src="https://img1.pixhost.to/images/6825/616202594_skyzopedia.jpg" alt="Murpush" class="product-image">
+            <button class="buy-button" data-product="MURPUSH" data-price="3K">BELI SEKARANG</button>
+        </div>
+        
+        <div class="product-card">
+            <h2 class="product-title">MURBUG</h2>
+            <div class="product-price">HARGA: 25K</div>
+            <img src="https://img1.pixhost.to/images/6825/616207643_skyzopedia.jpg" alt="Murbug" class="product-image">
+            <button class="buy-button" data-product="MURBUG" data-price="25K">BELI SEKARANG</button>
+        </div>
+        
+        <!-- New Product: BOT PUSH KONTAK -->
+        <div class="product-card">
+            <h2 class="product-title">BOT PUSH KONTAK</h2>
+            <div class="product-price">PAKET HARGA:</div>
+            <div class="price-item">
+                <span>1 HARI</span>
+                <span class="price-value">3K</span>
+                <button class="buy-button" data-product="BOT PUSH KONTAK (1 HARI)" data-price="3K">BELI</button>
+            </div>
+            <div class="price-item">
+                <span>3 HARI</span>
+                <span class="price-value">5K</span>
+                <button class="buy-button" data-product="BOT PUSH KONTAK (3 HARI)" data-price="5K">BELI</button>
+            </div>
+            <div class="price-item">
+                <span>7 HARI</span>
+                <span class="price-value">10K</span>
+                <button class="buy-button" data-product="BOT PUSH KONTAK (7 HARI)" data-price="10K">BELI</button>
+            </div>
+            <div class="price-item">
+                <span>14 HARI</span>
+                <span class="price-value">15K</span>
+                <button class="buy-button" data-product="BOT PUSH KONTAK (14 HARI)" data-price="15K">BELI</button>
+            </div>
+            <div class="price-item">
+                <span>17 HARI</span>
+                <span class="price-value">20K</span>
+                <button class="buy-button" data-product="BOT PUSH KONTAK (17 HARI)" data-price="20K">BELI</button>
+            </div>
+            <div class="price-item">
+                <span>20 HARI</span>
+                <span class="price-value">25K</span>
+                <button class="buy-button" data-product="BOT PUSH KONTAK (20 HARI)" data-price="25K">BELI</button>
+            </div>
+            <div class="price-item">
+                <span>24 HARI</span>
+                <span class="price-value">30K</span>
+                <button class="buy-button" data-product="BOT PUSH KONTAK (24 HARI)" data-price="30K">BELI</button>
+            </div>
+            <div class="price-item">
+                <span>1 BULAN</span>
+                <span class="price-value">35K</span>
+                <button class="buy-button" data-product="BOT PUSH KONTAK (1 BULAN)" data-price="35K">BELI</button>
+            </div>
+        </div>
+        
+        <!-- New Product: PANEL BOT WA -->
+        <div class="product-card">
+            <h2 class="product-title">PANEL BOT WA</h2>
+            <div class="product-price">PAKET HARGA:</div>
+            <div class="price-item">
+                <span>1GB</span>
+                <span class="price-value">500P</span>
+                <button class="buy-button" data-product="PANEL BOT WA (1GB)" data-price="500P">BELI</button>
+            </div>
+            <div class="price-item">
+                <span>2GB</span>
+                <span class="price-value">1K</span>
+                <button class="buy-button" data-product="PANEL BOT WA (2GB)" data-price="1K">BELI</button>
+            </div>
+            <div class="price-item">
+                <span>3GB</span>
+                <span class="price-value">1,5K</span>
+                <button class="buy-button" data-product="PANEL BOT WA (3GB)" data-price="1,5K">BELI</button>
+            </div>
+            <div class="price-item">
+                <span>4GB</span>
+                <span class="price-value">2K</span>
+                <button class="buy-button" data-product="PANEL BOT WA (4GB)" data-price="2K">BELI</button>
+            </div>
+            <div class="price-item">
+                <span>5GB</span>
+                <span class="price-value">2,5K</span>
+                <button class="buy-button" data-product="PANEL BOT WA (5GB)" data-price="2,5K">BELI</button>
+            </div>
+            <div class="price-item">
+                <span>6GB</span>
+                <span class="price-value">3K</span>
+                <button class="buy-button" data-product="PANEL BOT WA (6GB)" data-price="3K">BELI</button>
+            </div>
+            <div class="price-item">
+                <span>7GB</span>
+                <span class="price-value">3,5K</span>
+                <button class="buy-button" data-product="PANEL BOT WA (7GB)" data-price="3,5K">BELI</button>
+            </div>
+            <div class="price-item">
+                <span>8GB</span>
+                <span class="price-value">4K</span>
+                <button class="buy-button" data-product="PANEL BOT WA (8GB)" data-price="4K">BELI</button>
+            </div>
+            <div class="price-item">
+                <span>9GB</span>
+                <span class="price-value">4,5K</span>
+                <button class="buy-button" data-product="PANEL BOT WA (9GB)" data-price="4,5K">BELI</button>
+            </div>
+            <div class="price-item">
+                <span>10GB</span>
+                <span class="price-value">5K</span>
+                <button class="buy-button" data-product="PANEL BOT WA (10GB)" data-price="5K">BELI</button>
+            </div>
+            <div class="price-item" style="border-bottom: none;">
+                <span>UNLI</span>
+                <span class="price-value">7K</span>
+                <button class="buy-button" data-product="PANEL BOT WA (UNLI)" data-price="7K">BELI</button>
+            </div>
         </div>
     </div>
     
-    <div class="container" id="mainContent" style="display: none;">
-        <header>
-            <div class="light light-1"></div>
-            <div class="light light-2"></div>
-            <div class="light light-3"></div>
-            <div class="light light-4"></div>
-            <div class="light light-5"></div>
-            <h1>PRODUK REV HOST</h1>
-            <div class="animated-line"></div>
-            <div class="welcome-message" id="welcomeMessage"></div>
-        </header>
-        
-        <!-- Menu Tabs -->
-        <div class="menu-tabs">
-            <button class="menu-tab active" data-tab="hosting">PRODUK HOSTING</button>
-            <button class="menu-tab" data-tab="bot-push">BOT PUSH KONTAK</button>
-            <button class="menu-tab" data-tab="bot-wa">PANEL BOT WA</button>
-        </div>
-        
-        <!-- Menu 1: Produk Hosting -->
-        <div class="menu-section active" id="hosting">
-            <div class="products-grid">
-                <div class="product-card">
-                    <h2 class="product-title">RESELLER PANEL</h2>
-                    <div class="product-price">HARGA: 5K</div>
-                    <img src="https://files.catbox.moe/h2bvce.jpg" alt="Reseller Panel" class="product-image">
-                    <button class="buy-button">BELI SEKARANG</button>
-                </div>
-                
-                <div class="product-card">
-                    <h2 class="product-title">ADMIN PANEL</h2>
-                    <div class="product-price">HARGA: 10K</div>
-                    <img src="https://files.catbox.moe/h2bvce.jpg" alt="Admin Panel" class="product-image">
-                    <button class="buy-button">BELI SEKARANG</button>
-                </div>
-                
-                <div class="product-card">
-                    <h2 class="product-title">OWNER PANEL</h2>
-                    <div class="product-price">HARGA: 17K</div>
-                    <img src="https://files.catbox.moe/h2bvce.jpg" alt="Owner Panel" class="product-image">
-                    <button class="buy-button">BELI SEKARANG</button>
-                </div>
-                
-                <div class="product-card">
-                    <h2 class="product-title">PT PANEL</h2>
-                    <div class="product-price">HARGA: 25K</div>
-                    <img src="https://files.catbox.moe/h2bvce.jpg" alt="PT Panel" class="product-image">
-                    <button class="buy-button">BELI SEKARANG</button>
-                </div>
-                
-                <div class="product-card">
-                    <h2 class="product-title">MURPUSH</h2>
-                    <div class="product-price">HARGA: 3K</div>
-                    <img src="https://img1.pixhost.to/images/6825/616202594_skyzopedia.jpg" alt="Murpush" class="product-image">
-                    <button class="buy-button">BELI SEKARANG</button>
-                </div>
-                
-                <div class="product-card">
-                    <h2 class="product-title">MURBUG</h2>
-                    <div class="product-price">HARGA: 25K</div>
-                    <img src="https://img1.pixhost.to/images/6825/616207643_skyzopedia.jpg" alt="Murbug" class="product-image">
-                    <button class="buy-button">BELI SEKARANG</button>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Menu 2: Bot Push Kontak -->
-        <div class="menu-section" id="bot-push">
-            <div class="products-grid">
-                <div class="product-card">
-                    <h2 class="product-title">BOT PUSH KONTAK</h2>
-                    <div class="product-price">PAKET HARGA:</div>
-                    <div class="price-item">
-                        <span>1 HARI</span>
-                        <span class="price-value">3K</span>
-                        <button class="buy-button">BELI</button>
-                    </div>
-                    <div class="price-item">
-                        <span>3 HARI</span>
-                        <span class="price-value">5K</span>
-                        <button class="buy-button">BELI</button>
-                    </div>
-                    <div class="price-item">
-                        <span>7 HARI</span>
-                        <span class="price-value">10K</span>
-                        <button class="buy-button">BELI</button>
-                    </div>
-                    <div class="price-item">
-                        <span>14 HARI</span>
-                        <span class="price-value">15K</span>
-                        <button class="buy-button">BELI</button>
-                    </div>
-                    <div class="price-item">
-                        <span>17 HARI</span>
-                        <span class="price-value">20K</span>
-                        <button class="buy-button">BELI</button>
-                    </div>
-                    <div class="price-item">
-                        <span>20 HARI</span>
-                        <span class="price-value">25K</span>
-                        <button class="buy-button">BELI</button>
-                    </div>
-                    <div class="price-item">
-                        <span>24 HARI</span>
-                        <span class="price-value">30K</span>
-                        <button class="buy-button">BELI</button>
-                    </div>
-                    <div class="price-item">
-                        <span>1 BULAN</span>
-                        <span class="price-value">35K</span>
-                        <button class="buy-button">BELI</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Menu 3: Panel Bot WA -->
-        <div class="menu-section" id="bot-wa">
-            <div class="products-grid">
-                <div class="product-card">
-                    <h2 class="product-title">PANEL BOT WA</h2>
-                    <div class="product-price">PAKET HARGA:</div>
-                    <div class="price-item">
-                        <span>1GB</span>
-                        <span class="price-value">500P</span>
-                        <button class="buy-button">BELI</button>
-                    </div>
-                    <div class="price-item">
-                        <span>2GB</span>
-                        <span class="price-value">1K</span>
-                        <button class="buy-button">BELI</button>
-                    </div>
-                    <div class="price-item">
-                        <span>3GB</span>
-                        <span class="price-value">1,5K</span>
-                        <button class="buy-button">BELI</button>
-                    </div>
-                    <div class="price-item">
-                        <span>4GB</span>
-                        <span class="price-value">2K</span>
-                        <button class="buy-button">BELI</button>
-                    </div>
-                    <div class="price-item">
-                        <span>5GB</span>
-                        <span class="price-value">2,5K</span>
-                        <button class="buy-button">BELI</button>
-                    </div>
-                    <div class="price-item">
-                        <span>6GB</span>
-                        <span class="price-value">3K</span>
-                        <button class="buy-button">BELI</button>
-                    </div>
-                    <div class="price-item">
-                        <span>7GB</span>
-                        <span class="price-value">3,5K</span>
-                        <button class="buy-button">BELI</button>
-                    </div>
-                    <div class="price-item">
-                        <span>8GB</span>
-                        <span class="price-value">4K</span>
-                        <button class="buy-button">BELI</button>
-                    </div>
-                    <div class="price-item">
-                        <span>9GB</span>
-                        <span class="price-value">4,5K</span>
-                        <button class="buy-button">BELI</button>
-                    </div>
-                    <div class="price-item">
-                        <span>10GB</span>
-                        <span class="price-value">5K</span>
-                        <button class="buy-button">BELI</button>
-                    </div>
-                    <div class="price-item" style="border-bottom: none;">
-                        <span>UNLI</span>
-                        <span class="price-value">7K</span>
-                        <button class="buy-button">BELI</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <footer>
-            <p>© 2025 PRODUK REV HOST | All Rights Reserved</p>
-        </footer>
-    </div>
+    <footer>
+        <p>© 2025 PRODUK REV HOST | All Rights Reserved</p>
+    </footer>
+</div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const nameModal = document.getElementById('nameModal');
-            const nameInput = document.getElementById('nameInput');
-            const submitName = document.getElementById('submitName');
-            const mainContent = document.getElementById('mainContent');
-            const welcomeMessage = document.getElementById('welcomeMessage');
-            
-            // Check if name is already stored
-            const storedName = localStorage.getItem('visitorName');
-            if (storedName) {
+<!-- WhatsApp Button -->
+<a id="whatsappButton" class="whatsapp-button" target="_blank" style="display: none;">
+    <i class="fab fa-whatsapp"></i>
+</a>
+<div class="whatsapp-tooltip">Hubungi Kami via WhatsApp</div>
+
+<!-- Payment Modal -->
+<div class="payment-modal" id="paymentModal">
+    <div class="payment-content">
+        <h3>PILIH METODE PEMBAYARAN</h3>
+        <div class="payment-options">
+            <div class="payment-option" data-method="QRIS">QRIS</div>
+            <div class="payment-option" data-method="DANA">DANA</div>
+            <div class="payment-option" data-method="GO-PAY">GO-PAY</div>
+        </div>
+        <button class="confirm-payment" id="confirmPayment">KONFIRMASI PEMBAYARAN</button>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const nameModal = document.getElementById('nameModal');
+        const nameInput = document.getElementById('nameInput');
+        const submitName = document.getElementById('submitName');
+        const mainContent = document.getElementById('mainContent');
+        const welcomeMessage = document.getElementById('welcomeMessage');
+        const whatsappButton = document.getElementById('whatsappButton');
+        const paymentModal = document.getElementById('paymentModal');
+        const paymentOptions = document.querySelectorAll('.payment-option');
+        const confirmPayment = document.getElementById('confirmPayment');
+        
+        let selectedProduct = null;
+        let selectedPrice = null;
+        let selectedMethod = null;
+        let buyerName = '';
+        
+        // WhatsApp setup
+        function setupWhatsAppButton() {
+            const phoneNumber = '6281324982853'; // Ganti dengan nomor WhatsApp Anda
+            whatsappButton.href = `https://wa.me/${phoneNumber}`;
+            whatsappButton.style.display = 'flex';
+        }
+        
+        // Check if name is already stored
+        const storedName = localStorage.getItem('visitorName');
+        if (storedName) {
+            nameModal.style.display = 'none';
+            mainContent.style.display = 'block';
+            welcomeMessage.textContent = `Selamat datang kembali, ${storedName}!`;
+            buyerName = storedName;
+            setupWhatsAppButton();
+        }
+        
+        submitName.addEventListener('click', function() {
+            const name = nameInput.value.trim();
+            if (name) {
+                localStorage.setItem('visitorName', name);
                 nameModal.style.display = 'none';
                 mainContent.style.display = 'block';
-                welcomeMessage.textContent = `Selamat datang kembali, ${storedName}!`;
+                welcomeMessage.textContent = `Selamat datang, ${name}!`;
+                buyerName = name;
+                setupWhatsAppButton();
+            } else {
+                alert('Silakan masukkan nama Anda terlebih dahulu!');
             }
-            
-            submitName.addEventListener('click', function() {
-                const name = nameInput.value.trim();
-                if (name) {
-                    localStorage.setItem('visitorName', name);
-                    nameModal.style.display = 'none';
-                    mainContent.style.display = 'block';
-                    welcomeMessage.textContent = `Selamat datang, ${name}!`;
-                } else {
-                    alert('Silakan masukkan nama Anda terlebih dahulu!');
-                }
-            });
-            
-            // Also allow Enter key to submit
-            nameInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    submitName.click();
-                }
-            });
-            
-            // Tab switching functionality
-            const tabs = document.querySelectorAll('.menu-tab');
-            tabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    // Remove active class from all tabs and sections
-                    tabs.forEach(t => t.classList.remove('active'));
-                    document.querySelectorAll('.menu-section').forEach(section => {
-                        section.classList.remove('active');
-                    });
-                    
-                    // Add active class to clicked tab and corresponding section
-                    this.classList.add('active');
-                    const tabId = this.getAttribute('data-tab');
-                    document.getElementById(tabId).classList.add('active');
+        });
+        
+        // Also allow Enter key to submit
+        nameInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                submitName.click();
+            }
+        });
+
+        // Setup WhatsApp button when main content is shown
+        if (mainContent.style.display !== 'none') {
+            setupWhatsAppButton();
+        }
+        
+        // Buy button click handler
+        document.querySelectorAll('.buy-button').forEach(button => {
+            button.addEventListener('click', function() {
+                selectedProduct = this.getAttribute('data-product');
+                selectedPrice = this.getAttribute('data-price');
+                
+                // Reset selected payment method
+                paymentOptions.forEach(option => {
+                    option.classList.remove('selected');
                 });
+                selectedMethod = null;
+                
+                // Show payment modal
+                paymentModal.style.display = 'flex';
             });
         });
-    </script>
+        
+        // Payment option selection
+        paymentOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                paymentOptions.forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedMethod = this.getAttribute('data-method');
+            });
+        });
+        
+        // Confirm payment
+        confirmPayment.addEventListener('click', function() {
+            if (!selectedMethod) {
+                alert('Silakan pilih metode pembayaran terlebih dahulu!');
+                return;
+            }
+            
+            // Format WhatsApp message
+            const message = `HALO MAS REV, SAYA INGIN MELAKUKAN PEMBAYARAN
+
+🛒BARANG: [PRODUK YANG DIPILIH]
+💸HARGA: [HARGA PRODUK]
+👤NAMA PEMBELI: [NAMA PEMBELI]
+💳METODE PEMBAYARAN: [METODE YANG DIPILIH]
+
 </body>
-    </html>
+</html>
