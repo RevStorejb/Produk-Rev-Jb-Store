@@ -22,6 +22,93 @@
             color: white;
             font-family: 'Poppins', sans-serif;
             overflow-x: hidden;
+            background-image: url('https://img1.pixhost.to/images/6826/616220504_skyzopedia.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(10, 10, 32, 0.85);
+            z-index: -1;
+        }
+        
+        .name-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .name-form {
+            background: rgba(20, 20, 50, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.5);
+            border: 2px solid var(--color1);
+            animation: borderGlow 6s infinite linear;
+            max-width: 400px;
+            width: 90%;
+        }
+        
+        .name-form h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: white;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            background: linear-gradient(90deg, var(--color1), var(--color2), var(--color3));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .name-input {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+        
+        .name-input:focus {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 10px var(--color1);
+        }
+        
+        .submit-name {
+            padding: 10px 25px;
+            background: linear-gradient(45deg, var(--color1), var(--color3));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 3px 10px rgba(255,0,255,0.3);
+        }
+        
+        .submit-name:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255,0,255,0.5);
         }
         
         .container {
@@ -72,6 +159,7 @@
             transition: transform 0.3s, box-shadow 0.3s;
             border: 1px solid transparent;
             animation: borderGlow 6s infinite linear;
+            backdrop-filter: blur(5px);
         }
         
         @keyframes borderGlow {
@@ -242,6 +330,14 @@
             font-size: 0.9rem;
         }
         
+        .welcome-message {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            color: var(--color2);
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+        
         @media (max-width: 768px) {
             h1 {
                 font-size: 2.5rem;
@@ -254,7 +350,17 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="overlay"></div>
+    
+    <div class="name-modal" id="nameModal">
+        <div class="name-form">
+            <h2>MASUKKAN NAMA ANDA</h2>
+            <input type="text" class="name-input" id="nameInput" placeholder="Nama Anda..." required>
+            <button class="submit-name" id="submitName">MASUK</button>
+        </div>
+    </div>
+    
+    <div class="container" id="mainContent" style="display: none;">
         <header>
             <div class="light light-1"></div>
             <div class="light light-2"></div>
@@ -263,6 +369,7 @@
             <div class="light light-5"></div>
             <h1>PRODUK REV HOST</h1>
             <div class="animated-line"></div>
+            <div class="welcome-message" id="welcomeMessage"></div>
         </header>
         
         <div class="products-grid">
@@ -418,8 +525,45 @@
         </div>
         
         <footer>
-            <p>© 2025 PRODUK REV HOST | All Rights Reserved</p>
+            <p>© 2023 PRODUK REV HOST | All Rights Reserved</p>
         </footer>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const nameModal = document.getElementById('nameModal');
+            const nameInput = document.getElementById('nameInput');
+            const submitName = document.getElementById('submitName');
+            const mainContent = document.getElementById('mainContent');
+            const welcomeMessage = document.getElementById('welcomeMessage');
+            
+            // Check if name is already stored
+            const storedName = localStorage.getItem('visitorName');
+            if (storedName) {
+                nameModal.style.display = 'none';
+                mainContent.style.display = 'block';
+                welcomeMessage.textContent = `Selamat datang kembali, ${storedName}!`;
+            }
+            
+            submitName.addEventListener('click', function() {
+                const name = nameInput.value.trim();
+                if (name) {
+                    localStorage.setItem('visitorName', name);
+                    nameModal.style.display = 'none';
+                    mainContent.style.display = 'block';
+                    welcomeMessage.textContent = `Selamat datang, ${name}!`;
+                } else {
+                    alert('Silakan masukkan nama Anda terlebih dahulu!');
+                }
+            });
+            
+            // Also allow Enter key to submit
+            nameInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    submitName.click();
+                }
+            });
+        });
+    </script>
 </body>
 </html>
