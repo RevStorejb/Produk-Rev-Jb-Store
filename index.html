@@ -387,6 +387,113 @@
             text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
         }
         
+        /* Payment Modal Styles */
+        .payment-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+        }
+        
+        .payment-form {
+            background: rgba(20, 20, 50, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.5);
+            border: 2px solid var(--color1);
+            animation: borderGlow 6s infinite linear;
+        }
+        
+        .payment-form h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: white;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            background: linear-gradient(90deg, var(--color1), var(--color2), var(--color3));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-align: center;
+        }
+        
+        .payment-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .payment-option {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .payment-option:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+        
+        .payment-option input {
+            margin-right: 15px;
+            transform: scale(1.3);
+        }
+        
+        .payment-option img {
+            width: 30px;
+            height: 30px;
+            margin-right: 15px;
+            object-fit: contain;
+        }
+        
+        .payment-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .payment-button {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .cancel-payment {
+            background: rgba(255, 0, 0, 0.3);
+            color: white;
+        }
+        
+        .cancel-payment:hover {
+            background: rgba(255, 0, 0, 0.5);
+        }
+        
+        .confirm-payment {
+            background: linear-gradient(45deg, var(--color1), var(--color3));
+            color: white;
+            box-shadow: 0 3px 10px rgba(255,0,255,0.3);
+        }
+        
+        .confirm-payment:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255,0,255,0.5);
+        }
+        
         @media (max-width: 768px) {
             h1 {
                 font-size: 2.5rem;
@@ -416,6 +523,34 @@
             <h2>MASUKKAN NAMA ANDA</h2>
             <input type="text" class="name-input" id="nameInput" placeholder="Nama Anda..." required>
             <button class="submit-name" id="submitName">MASUK</button>
+        </div>
+    </div>
+    
+    <!-- Payment Modal -->
+    <div class="payment-modal" id="paymentModal">
+        <div class="payment-form">
+            <h2>PILIH METODE PEMBAYARAN</h2>
+            <div class="payment-options">
+                <label class="payment-option">
+                    <input type="radio" name="payment" value="DANA" checked>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/72/Logo_dana_blue.svg" alt="DANA">
+                    <span>DANA</span>
+                </label>
+                <label class="payment-option">
+                    <input type="radio" name="payment" value="GOPAY">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/8/86/Gopay_logo.svg" alt="GOPAY">
+                    <span>GOPAY</span>
+                </label>
+                <label class="payment-option">
+                    <input type="radio" name="payment" value="QRIS">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/d/df/QRIS_logo.svg" alt="QRIS">
+                    <span>QRIS</span>
+                </label>
+            </div>
+            <div class="payment-buttons">
+                <button class="payment-button cancel-payment" id="cancelPayment">BATAL</button>
+                <button class="payment-button confirm-payment" id="confirmPayment">KONFIRMASI</button>
+            </div>
         </div>
     </div>
     
@@ -655,7 +790,66 @@
                     submitName.click();
                 }
             });
+            
+            // Payment functionality
+            const paymentModal = document.getElementById('paymentModal');
+            const cancelPayment = document.getElementById('cancelPayment');
+            const confirmPayment = document.getElementById('confirmPayment');
+            let currentProduct = null;
+            
+            // Handle buy button clicks
+            document.querySelectorAll('.buy-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productCard = this.closest('.product-card');
+                    const productName = productCard.querySelector('.product-title').textContent;
+                    let productPrice = '';
+                    
+                    // Check if it's a single price product
+                    const productPriceElement = productCard.querySelector('.product-price');
+                    if (productPriceElement && productPriceElement.textContent.includes('HARGA:')) {
+                        productPrice = productPriceElement.textContent.replace('HARGA:', '').trim();
+                    }
+                    // For products with multiple price options
+                    else {
+                        const selectedOption = productCard.querySelector('.price-item:has(.buy-button:hover)');
+                        if (selectedOption) {
+                            const optionName = selectedOption.querySelector('span:first-child').textContent;
+                            const optionPrice = selectedOption.querySelector('.price-value').textContent;
+                            productPrice = `${optionName} - ${optionPrice}`;
+                        } else {
+                            productPrice = productCard.querySelector('.price-value')?.textContent || '';
+                        }
+                    }
+                    
+                    currentProduct = {
+                        name: productName,
+                        price: productPrice
+                    };
+                    
+                    paymentModal.style.display = 'flex';
+                });
+            });
+            
+            // Cancel payment
+            cancelPayment.addEventListener('click', function() {
+                paymentModal.style.display = 'none';
+                currentProduct = null;
+            });
+            
+            // Confirm payment
+            confirmPayment.addEventListener('click', function() {
+                if (!currentProduct) return;
+                
+                const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+                const buyerName = localStorage.getItem('visitorName') || 'Pelanggan';
+                
+                const message = `HALO MAS REV, SAYA INGIN MELAKUKAN PEMBAYARAN%0A%0A🛒BARANG: ${currentProduct.name}%0A💸HARGA: ${currentProduct.price}%0A👤NAMA PEMBELI: ${buyerName}%0A💳METODE PEMBAYARAN: ${paymentMethod}`;
+                
+                window.open(`https://wa.me/6281324982853?text=${message}`, '_blank');
+                paymentModal.style.display = 'none';
+                currentProduct = null;
+            });
         });
     </script>
 </body>
-                      </html>
+</html>
