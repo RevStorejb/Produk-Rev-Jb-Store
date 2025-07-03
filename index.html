@@ -458,6 +458,35 @@
             object-fit: contain;
         }
         
+        .payment-details {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .payment-details.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .payment-details p {
+            margin: 5px 0;
+            font-size: 0.9rem;
+        }
+        
+        .payment-details strong {
+            color: var(--color2);
+        }
+        
+        .payment-details img {
+            max-width: 100%;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
         .payment-buttons {
             display: flex;
             justify-content: space-between;
@@ -530,26 +559,48 @@
     <div class="payment-modal" id="paymentModal">
         <div class="payment-form">
             <h2>PILIH METODE PEMBAYARAN</h2>
+            
             <div class="payment-options">
                 <label class="payment-option">
                     <input type="radio" name="payment" value="DANA" checked>
                     <img src="https://upload.wikimedia.org/wikipedia/commons/7/72/Logo_dana_blue.svg" alt="DANA">
                     <span>DANA</span>
                 </label>
+                
+                <div class="payment-details" id="dana-details">
+                    <p><strong>Nomor DANA:</strong> 085828481568</p>
+                    <p><strong>Atas Nama:</strong> REV HOSTING</p>
+                    <p>Silakan transfer tepat sesuai nominal yang tertera</p>
+                </div>
+                
                 <label class="payment-option">
                     <input type="radio" name="payment" value="GOPAY">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/8/86/Gopay_logo.svg" alt="GOPAY">
                     <span>GOPAY</span>
                 </label>
+                
+                <div class="payment-details" id="gopay-details">
+                    <p><strong>Nomor GOPAY:</strong> 081324982853</p>
+                    <p><strong>Atas Nama:</strong> REV HOSTING</p>
+                    <p>Silakan transfer tepat sesuai nominal yang tertera</p>
+                </div>
+                
                 <label class="payment-option">
                     <input type="radio" name="payment" value="QRIS">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/d/df/QRIS_logo.svg" alt="QRIS">
                     <span>QRIS</span>
                 </label>
+                
+                <div class="payment-details" id="qris-details">
+                    <p><strong>Scan QR Code berikut:</strong></p>
+                    <img src="https://files.catbox.moe/0ro09v.jpg" alt="QRIS Code">
+                    <p>Silakan transfer tepat sesuai nominal yang tertera</p>
+                </div>
             </div>
+            
             <div class="payment-buttons">
                 <button class="payment-button cancel-payment" id="cancelPayment">BATAL</button>
-                <button class="payment-button confirm-payment" id="confirmPayment">KONFIRMASI</button>
+                <button class="payment-button confirm-payment" id="confirmPayment">KIRIM BUKTI TRANSFER KE WA</button>
             </div>
         </div>
     </div>
@@ -747,17 +798,33 @@
             const mainContent = document.getElementById('mainContent');
             const welcomeMessage = document.getElementById('welcomeMessage');
             
+            // Payment details
+            const paymentDetails = {
+                'DANA': {
+                    number: '085828481568',
+                    name: 'REV HOSTING',
+                    type: 'number'
+                },
+                'GOPAY': {
+                    number: '081324982853',
+                    name: 'REV HOSTING',
+                    type: 'number'
+                },
+                'QRIS': {
+                    image: 'https://files.catbox.moe/0ro09v.jpg',
+                    type: 'qris'
+                }
+            };
+            
             // Tab functionality
             const tabs = document.querySelectorAll('.menu-tab');
             const tabContents = document.querySelectorAll('.menu-content');
             
             tabs.forEach(tab => {
                 tab.addEventListener('click', () => {
-                    // Remove active class from all tabs and contents
                     tabs.forEach(t => t.classList.remove('active'));
                     tabContents.forEach(c => c.classList.remove('active'));
                     
-                    // Add active class to clicked tab and corresponding content
                     tab.classList.add('active');
                     const tabId = tab.getAttribute('data-tab');
                     document.getElementById(tabId).classList.add('active');
@@ -784,7 +851,6 @@
                 }
             });
             
-            // Also allow Enter key to submit
             nameInput.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     submitName.click();
@@ -797,12 +863,28 @@
             const confirmPayment = document.getElementById('confirmPayment');
             let currentProduct = null;
             
+            // Show payment details when payment method is selected
+            const paymentRadios = document.querySelectorAll('input[name="payment"]');
+            const allPaymentDetails = document.querySelectorAll('.payment-details');
+            
+            paymentRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    allPaymentDetails.forEach(detail => detail.classList.remove('active'));
+                    const detailsId = `${this.value.toLowerCase()}-details`;
+                    document.getElementById(detailsId).classList.add('active');
+                });
+            });
+            
+            // Initialize with DANA details shown
+            document.getElementById('dana-details').classList.add('active');
+            
             // Handle buy button clicks
             document.querySelectorAll('.buy-button').forEach(button => {
                 button.addEventListener('click', function() {
                     const productCard = this.closest('.product-card');
                     const productName = productCard.querySelector('.product-title').textContent;
                     let productPrice = '';
+                    let selectedOption = '';
                     
                     // Check if it's a single price product
                     const productPriceElement = productCard.querySelector('.product-price');
@@ -811,19 +893,17 @@
                     }
                     // For products with multiple price options
                     else {
-                        const selectedOption = productCard.querySelector('.price-item:has(.buy-button:hover)');
-                        if (selectedOption) {
-                            const optionName = selectedOption.querySelector('span:first-child').textContent;
-                            const optionPrice = selectedOption.querySelector('.price-value').textContent;
-                            productPrice = `${optionName} - ${optionPrice}`;
-                        } else {
-                            productPrice = productCard.querySelector('.price-value')?.textContent || '';
+                        const priceItem = this.closest('.price-item');
+                        if (priceItem) {
+                            selectedOption = priceItem.querySelector('span:first-child').textContent;
+                            productPrice = priceItem.querySelector('.price-value').textContent;
                         }
                     }
                     
                     currentProduct = {
                         name: productName,
-                        price: productPrice
+                        price: productPrice,
+                        option: selectedOption
                     };
                     
                     paymentModal.style.display = 'flex';
@@ -842,14 +922,41 @@
                 
                 const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
                 const buyerName = localStorage.getItem('visitorName') || 'Pelanggan';
+                const paymentInfo = paymentDetails[paymentMethod];
                 
-                const message = `HALO MAS REV, SAYA INGIN MELAKUKAN PEMBAYARAN%0A%0A🛒BARANG: ${currentProduct.name}%0A💸HARGA: ${currentProduct.price}%0A👤NAMA PEMBELI: ${buyerName}%0A💳METODE PEMBAYARAN: ${paymentMethod}`;
+                // Create order summary
+                let orderSummary = `📢 *ORDERAN BARU - REV HOSTING* 📢%0A%0A`;
+                orderSummary += `Halo Admin Rev Hosting%0A`;
+                orderSummary += `Saya Ingin Mengirim Bukti Transfer%0A%0A`;
+                orderSummary += `*Daftar Pesanan:*%0A`;
+                orderSummary += `➡️ ${currentProduct.name}`;
                 
-                window.open(`https://wa.me/6281324982853?text=${message}`, '_blank');
+                if (currentProduct.option) {
+                    orderSummary += ` (${currentProduct.option})`;
+                }
+                
+                orderSummary += `%0A%0A`;
+                orderSummary += `*Total Pembayaran:* ${currentProduct.price}%0A%0A`;
+                orderSummary += `*Metode Pembayaran Yang Saya Pakai:*%0A`;
+                orderSummary += `➡️ ${paymentMethod}%0A`;
+                
+                if (paymentInfo.type === 'number') {
+                    orderSummary += `Nomor: ${paymentInfo.number}%0A`;
+                    orderSummary += `Atas Nama: ${paymentInfo.name}%0A%0A`;
+                } else {
+                    orderSummary += `QR Code: ${paymentInfo.image}%0A%0A`;
+                }
+                
+                orderSummary += `*Nama Pembeli:* ${buyerName}%0A%0A`;
+                orderSummary += `*Silakan transfer tepat sesuai nominal:* ${currentProduct.price}%0A`;
+                orderSummary += `Saya sudah melakukan transfer dan berikut buktinya:`;
+                
+                // Open WhatsApp with the order summary
+                window.open(`https://wa.me/6281324982853?text=${orderSummary}`, '_blank');
                 paymentModal.style.display = 'none';
                 currentProduct = null;
             });
         });
     </script>
 </body>
-</html>
+                        </html>
